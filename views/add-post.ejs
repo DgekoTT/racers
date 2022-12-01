@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Node.js Course</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <%- include('./partials/head.ejs') %>
+
   <style>
     body {
       padding-top: 80px;
@@ -110,16 +107,9 @@
       background-color: rgba(0,0,0,0.6);
     }
   </style>
-</head>
+
 <body>
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/posts">Posts</a></li>
-      <li><a href="/add-post">New Post</a></li>
-      <li><a href="/contacts">Contacts</a></li>
-    </ul>
-  </nav>
+<%- include('./partials/nav.ejs') %>
   <form id="contact-form">
     <div class="form-info">
       <label>Post Title

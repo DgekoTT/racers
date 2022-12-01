@@ -24,9 +24,24 @@ async function startApp() {
 
 startApp();
 
-app.use(express.static('static'))
+app.use(express.static('views'))
 
 app.get('/', (req, res) => { // выдает главную страницу
     const title = 'Home';
     res.render(createPath('base'), {title});
+});
+
+app.get('/contacts', (req, res) => { // выдает главную контактов
+    const title = 'contacts';
+    res.render(createPath('contacts'), {title});
+});
+
+app.get('/posts', (req, res) => { // выдает главную постов
+    const title = 'Formula';
+    res.render(createPath('posts'), {title});
+});
+
+app.get('/add-post', (req, res) => { // добавляет пост
+    const title = 'ADD';
+    res.render(createPath('add-post'), {title});
 });
