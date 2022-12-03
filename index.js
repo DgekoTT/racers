@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require("mongoose");
 const fs = require('fs');
 const path = require('path');
-
+const morgan = require('morgan')
 const PORT = 3000;
 
 const app = express();
@@ -24,7 +24,9 @@ async function startApp() {
 
 startApp();
 
-app.use(express.static('views'))
+app.use( express.static('views'))
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))//  обеспечение для регистрации HTTP-запросов 
 
 app.get('/', (req, res) => { // выдает главную страницу
     const title = 'Home';
