@@ -2,7 +2,6 @@
 <html lang="en">
   <%- include('./partials/head.ejs') %>
 <body>
-  <%- include('./partials/nav.ejs') %>
   <style>
     .posts {
       padding-top: 80px;
@@ -12,10 +11,7 @@
       background: linear-gradient(to bottom, #a4b9be, #3140ca);
       color: #fff;
     }
-    h1 {
-      text-transform: uppercase;
-    }
-    
+  
     li {
       list-style: none;
     }
@@ -65,29 +61,31 @@
 }
     
   </style>
-</head>
 <ul class="navcat">
   <li class="cat"><a class="active" href="#home">Formula1</a></li>
   <li class="cat"><a href="#news">Formula2</a></li>
   <li class="cat"><a href="#contact">Formula3</a></li>
-  
 </ul>
 
 <body class="posts">
   <%- include('./partials/nav.ejs') %>
-  <ul>
-    <li>
-      <article>
-        <h2>
-          <a href="/posts/1">Post title</a>
-        </h2>
-        <p>about f</p>
-        <div class="info">
-          <span>01.12.22</span>
-          <span>WE</span>
-        </div>
-      </article>
-    </li>
-  </ul>
+    <ul>
+      <% if (posts.length) { %>
+        <% posts.forEach(({ id, title, date, text, author }) => { %>
+          <li>
+            <article>
+              <h2>
+                <a href="/posts/<%= id %>"><%= title %></a>
+              </h2>
+              <p><%= text %></p>
+              <div class="info">
+                <span><%= date %></span>
+                <span><%= author %></span>
+              </div>
+            </article>
+          </li>
+        <% }) %>
+      <% } %>
+    </ul>
 </body>
 </html>

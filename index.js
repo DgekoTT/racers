@@ -26,7 +26,7 @@ startApp();
 
 app.use( express.static('views'))
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))//  обеспечение для регистрации HTTP-запросов 
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))//  обеспечение для регистрации HTTP-запросов и вывод в терминал
 
 app.get('/', (req, res) => { // выдает главную страницу
     const title = 'Home';
@@ -40,10 +40,29 @@ app.get('/contacts', (req, res) => { // выдает главную контак
 
 app.get('/posts', (req, res) => { // выдает главную постов
     const title = 'Formula';
-    res.render(createPath('posts'), {title});
+    const posts = {
+        id: '1', 
+        text: 'we a here',
+        title: ' title',
+        date: '01.01.2022',
+        author: 'dgor',
+    }
+    res.render(createPath('posts'), {title, posts});
 });
 
 app.get('/add-post', (req, res) => { // добавляет пост
     const title = 'ADD';
     res.render(createPath('add-post'), {title});
 });
+
+app.get('/posts:id', (res, req) => {
+    const title = 'Post';
+    const post = {
+        id: '1', 
+        text: 'we a here',
+        title: ' title',
+        date: '01.01.2022',
+        author: 'dgor',
+    }
+    res.render(createPath('post'), {title, post});
+})
