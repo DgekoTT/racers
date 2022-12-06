@@ -40,13 +40,24 @@ app.get('/contacts', (req, res) => { // выдает главную контак
 
 app.get('/posts', (req, res) => { // выдает главную постов
     const title = 'Formula';
-    const posts = {
-        id: '1', 
-        text: 'we a here',
-        title: ' title',
-        date: '01.01.2022',
-        author: 'dgor',
-    }
+    const posts = [
+        {
+            id: '1', 
+            text: 'we a here',
+            title: ' title',
+            date: '01.01.2022',
+            author: 'dgor',
+            catName: 'F1',
+        },
+        {
+            id: '2', 
+            text: 'we a here2',
+            title: ' title2',
+            date: '01.02.2022',
+            author: 'dgor22',
+            catName: 'F2',
+        }
+    ];
     res.render(createPath('posts'), {title, posts});
 });
 
@@ -55,14 +66,16 @@ app.get('/add-post', (req, res) => { // добавляет пост
     res.render(createPath('add-post'), {title});
 });
 
-app.get('/posts:id', (res, req) => {
+app.get('/posts:id', (req, res) => {
     const title = 'Post';
-    const post = {
-        id: '1', 
-        text: 'we a here',
-        title: ' title',
-        date: '01.01.2022',
-        author: 'dgor',
-    }
+    const post = 
+        {
+            id: '1', 
+            text: 'we a here',
+            title: ' title',
+            date: '01.01.2022',
+            author: 'dgor',
+            catName: 'F1',
+        };
     res.render(createPath('post'), {title, post});
 })

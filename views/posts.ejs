@@ -2,90 +2,135 @@
 <html lang="en">
   <%- include('./partials/head.ejs') %>
 <body>
-  <style>
-    .posts {
-      padding-top: 80px;
-      min-height: 100vh;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 20px;
-      background: linear-gradient(to bottom, #a4b9be, #3140ca);
-      color: #fff;
-    }
-  
-    li {
-      list-style: none;
-    }
-    ul {
-      padding: 0;
-    }
-    a {
-      text-decoration: none;
-      color: #fff;
-    }
-    article {
-      background-color: rgba(0,0,0,0.4);
-      padding: 10px 20px;
-      border-radius: 3px;
-      margin-bottom: 10px;
-    }
-    .info {
-      display: flex;
-      justify-content: space-between;
-    }
-    h2 a {
-      color: aqua;
-    }
-    .navcat {
-    position: absolute;top: 80px;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-}
+    <style>
+        body {
+          padding-top: 80px;
+          min-height: 100vh;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 20px;
+          background: linear-gradient(to bottom, #51d5f3, #d6d5d8);
+          color: #fff;
+        }
+        article {
+            background-color: rgba(0,0,0,0.4);
+            padding: 10px 20px;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+        ul {
+          padding-inline-start: 0px;
+        }
+        .filterDiv {
+          background-color: #2196F3;
+          color: #ffffff;
+          margin: 2px;
+          display: none;
+        }
 
-.cat {
-    float: left;
-}
+        .show {
+          display: block;
+        }
 
-.cat a {
-    display: line;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
+        .container {
+          margin-top: 20px;
+          overflow: hidden;
+        }
+        .btn {
+            
+            border: none;
+            outline: none;
+            display: inline-block;
+            padding: 12px 16px;
+            background-color: #3024b8;
+            cursor: pointer;
+            
+        }
+        .btn:hover {
+            background-color: #ddd;
+        }
 
-.cat a:hover {
-    background-color: #111;
-}
-    
-  </style>
-<ul class="navcat">
-  <li class="cat"><a class="active" href="#home">Formula1</a></li>
-  <li class="cat"><a href="#news">Formula2</a></li>
-  <li class="cat"><a href="#contact">Formula3</a></li>
-</ul>
+        .btn.active {
+            background-color: #666;
+            color: white;
+        }
 
-<body class="posts">
-  <%- include('./partials/nav.ejs') %>
-    <ul>
-      <% if (posts.length) { %>
-        <% posts.forEach(({ id, title, date, text, author }) => { %>
-          <li>
-            <article>
-              <h2>
-                <a href="/posts/<%= id %>"><%= title %></a>
-              </h2>
-              <p><%= text %></p>
-              <div class="info">
-                <span><%= date %></span>
-                <span><%= author %></span>
+        
+    </style>
+
+    <div id="myBtnContainer">
+        <button class="btn active" onclick="filterSelection('all')"> Show all</button>
+        <button class="btn" onclick="filterSelection('F1')"> Formula1</button>
+        <button class="btn" onclick="filterSelection('F2')"> Formula2</button>
+        <button class="btn" onclick="filterSelection('F3')"> Formula3</button>
+    </div>
+
+    <%- include('./partials/nav.ejs') %>
+    <div class="container">
+        <ul>
+            <% if (posts.length) { %>
+              <% posts.forEach(({ id, title, date, text, author,  catName  }) => { %>
+              <div class="filterDiv <%= catName %>">  
+                <li>
+                      <article class="wrapper">
+                        <h2>
+                          <a href="/posts/<%= id %>"><%= title %></a>
+                        </h2>
+                        <ins><%= catName %></ins>
+                        <p><%= text %></p>
+                        <div class="info">
+                          <span><%= date %></span>
+                          <span><%= author %></span>
+                        </div>
+                      </article>
+                  </li>
               </div>
-            </article>
-          </li>
-        <% }) %>
-      <% } %>
-    </ul>
+              <% }) %>
+            <% } %>
+        </ul>
+    </div>
+    <script>
+        filterSelection("all")
+        function filterSelection(c) {
+          var x, i;
+          x = document.getElementsByClassName("filterDiv");
+          if (c == "all") c = "";
+          for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "show");
+            if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+          }
+        }
+        // добалвяет выбранные категории для отображения
+        function w3AddClass(element, name) {
+          var i, arr1, arr2;
+          arr1 = element.className.split(" ");
+          arr2 = name.split(" ");
+          for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+          }
+        }
+        // убирает не выбранные категории
+        function w3RemoveClass(element, name) {
+          var i, arr1, arr2;
+          arr1 = element.className.split(" ");
+          arr2 = name.split(" ");
+          for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+              arr1.splice(arr1.indexOf(arr2[i]), 1);     
+            }
+          }
+          element.className = arr1.join(" ");
+        }
+        
+        // добавляем активный класс к текущей кнопке и выделяем его 
+        var btnContainer = document.getElementById("myBtnContainer");
+        var btns = btnContainer.getElementsByClassName("btn");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].addEventListener("click", function(){
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+          });
+        }
+    </script>
 </body>
 </html>
