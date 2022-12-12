@@ -3,7 +3,7 @@
   <%- include('./partials/head.ejs') %>
 <body class="add">
   <%- include('./partials/nav.ejs') %>
-  <form id="contact-form">
+  <form id="post-form" method="post" action="/add-post">
     <div class="form-info">
       <label>Post Title
         <input type="text" name="title">
@@ -12,7 +12,7 @@
         <input type="text" name="author">
       </label>
       <label>Category
-        <input type="text" name="Category">
+        <input type="text" name="catName">
       </label>
     </div>
     <div class="form-text">

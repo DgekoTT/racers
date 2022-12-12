@@ -69,21 +69,21 @@
         <ul>
             <% if (posts.length) { %>
               <% posts.forEach(({ id, title, date, text, author,  catName  }) => { %>
-              <div class="filterDiv <%= catName %>">  
-                <li>
-                      <article class="wrapper">
-                        <h2>
-                          <a href="/posts/<%= id %>"><%= title %></a>
-                        </h2>
-                        <ins><%= catName %></ins>
-                        <p><%= text %></p>
-                        <div class="info">
-                          <span><%= date %></span>
-                          <span><%= author %></span>
-                        </div>
-                      </article>
-                  </li>
-              </div>
+                <div class="filterDiv <%= catName %>">  
+                  <li>
+                        <article>
+                          <h2>
+                            <a href="/posts/<%= id %>"><%= title %></a>
+                          </h2>
+                          <ins><%= catName %></ins>
+                          <p><%= text %></p>
+                          <div class="info">
+                            <span><%= date %></span>
+                            <span><%= author %></span>
+                          </div>
+                        </article>
+                    </li>
+                </div>
               <% }) %>
             <% } %>
         </ul>

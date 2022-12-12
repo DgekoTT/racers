@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require("mongoose");
 const fs = require('fs');
 const path = require('path');
-const morgan = require('morgan')
+const morgan = require('morgan');
+const exp = require('constants');
 const PORT = 3000;
 
 const app = express();
@@ -28,6 +29,8 @@ app.use( express.static('views'))
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))//  обеспечение для регистрации HTTP-запросов и вывод в терминал
 
+app.use(express.urlencoded({extended: false}))// анализирует входящие запросы, небходим для обработки Post запроса мне
+
 app.get('/', (req, res) => { // выдает главную страницу
     const title = 'Home';
     res.render(createPath('base'), {title});
@@ -44,7 +47,7 @@ app.get('/posts', (req, res) => { // выдает главную постов
         {
             id: '1', 
             text: 'we a here',
-            title: ' title',
+            title: 'first',
             date: '01.01.2022',
             author: 'dgor',
             catName: 'F1',
@@ -66,16 +69,29 @@ app.get('/add-post', (req, res) => { // добавляет пост
     res.render(createPath('add-post'), {title});
 });
 
-app.get('/posts:id', (req, res) => {
+app.get('/posts/:id', (req, res) => {
     const title = 'Post';
     const post = 
         {
             id: '1', 
             text: 'we a here',
-            title: ' title',
+            title: 'first',
             date: '01.01.2022',
             author: 'dgor',
             catName: 'F1',
         };
-    res.render(createPath('post'), {title, post});
+    res.render(createPath('post'), {post, title});
+});
+
+app.post('/add-post', (req, res) => {
+    const { title, author, text, catName} = req.body
+    const post = { 
+        id: new Date(),
+        date: (new Date()).toLocaleDateString(),
+        title, 
+        author, 
+        text, 
+        catName
+    }
+    res.render(createPath('post'), {post, title})
 })
