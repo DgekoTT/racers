@@ -263,14 +263,6 @@ textarea {
   }
 
 
-  form {
-    background-color: rgba(0,0,0,0.4);
-    padding: 10px 20px;
-    border-radius: 3px;
-    display: flex;
-    flex-direction: column;
-  }
-
   form div {
     margin-bottom: 20px;
     display: flex;

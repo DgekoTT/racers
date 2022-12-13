@@ -68,14 +68,14 @@
     <div class="container">
         <ul>
             <% if (posts.length) { %>
-              <% posts.forEach(({ id, title, date, text, author,  catName  }) => { %>
-                <div class="filterDiv <%= catName %>">  
+              <% posts.forEach(({ id, title, date, text, author,  category  }) => { %>
+                <div class="filterDiv <%= category %>">  
                   <li>
                         <article>
                           <h2>
                             <a href="/posts/<%= id %>"><%= title %></a>
                           </h2>
-                          <ins><%= catName %></ins>
+                          <ins><%= category %></ins>
                           <p><%= text %></p>
                           <div class="info">
                             <span><%= date %></span>

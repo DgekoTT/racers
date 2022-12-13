@@ -4,22 +4,27 @@ const fs = require('fs');
 const path = require('path');
 const morgan = require('morgan');
 const exp = require('constants');
+const Driver = require('./models/driver.js');
+const { send } = require('process');
+
+
 const PORT = 3000;
 
 const app = express();
 
 app.set('view engine', 'ejs');
 
-const db_url = 'mongodb+srv://Dgeko:frGGT14@cluster0.lbrizgf.mongodb.net/?retryWrites=true&w=majority'
+const db_url = 'mongodb+srv://Dgeko:frGGT14@cluster0.lbrizgf.mongodb.net/racers?retryWrites=true&w=majority'
 
 const createPath = (page) => path.resolve(__dirname, './views', `${page}.ejs`);
 
 async function startApp() {
     try {
-        await mongoose.connect(db_url)
+        await mongoose.connect(db_url);
+        console.log('connected to DB');
         app.listen(PORT, () => console.log('server started on PORT ' + PORT));
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 
@@ -43,25 +48,13 @@ app.get('/contacts', (req, res) => { // выдает главную контак
 
 app.get('/posts', (req, res) => { // выдает главную постов
     const title = 'Formula';
-    const posts = [
-        {
-            id: '1', 
-            text: 'we a here',
-            title: 'first',
-            date: '01.01.2022',
-            author: 'dgor',
-            catName: 'F1',
-        },
-        {
-            id: '2', 
-            text: 'we a here2',
-            title: ' title2',
-            date: '01.02.2022',
-            author: 'dgor22',
-            catName: 'F2',
-        }
-    ];
-    res.render(createPath('posts'), {title, posts});
+    Driver
+        .find()
+        .then((posts) => res.render(createPath('posts'), {posts, title}))
+        .catch((e) => {
+            console.log(e);
+            res.render(createPath('error'), )
+        })
 });
 
 app.get('/add-post', (req, res) => { // добавляет пост
@@ -84,14 +77,13 @@ app.get('/posts/:id', (req, res) => {
 });
 
 app.post('/add-post', (req, res) => {
-    const { title, author, text, catName} = req.body
-    const post = { 
-        id: new Date(),
-        date: (new Date()).toLocaleDateString(),
-        title, 
-        author, 
-        text, 
-        catName
-    }
-    res.render(createPath('post'), {post, title})
-})
+    const { title, author, text, category} = req.body;
+    const post = new Driver({title, author, text, category});
+    post
+        .save()
+        .then((result) => res.send(result))
+        .catch((e) => {
+            console.log(e);
+            res.render(createPath('error'), )
+        })
+});

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const Shema = mongoose.Schema;
 
 const postShema = new Shema({
@@ -15,8 +15,8 @@ const postShema = new Shema({
         required: true,
     },
     category: {
-        type: ObjectId,
-        required: true,
+        type: String,
+        
     },
     photo: {
         type: String
@@ -24,5 +24,7 @@ const postShema = new Shema({
 },{ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 
-export default mongoose.model('Post', postShema); 
+const Driver =  mongoose.model('Driver', postShema); 
+ module.exports = Driver;
+
 
