@@ -68,7 +68,7 @@
     <div class="container">
         <ul>
             <% if (posts.length) { %>
-              <% posts.forEach(({ id, title, date, text, author,  category  }) => { %>
+              <% posts.forEach(({ id, title, created_at, text, author,  category  }) => { %>
                 <div class="filterDiv <%= category %>">  
                   <li>
                         <article>
@@ -78,7 +78,7 @@
                           <ins><%= category %></ins>
                           <p><%= text %></p>
                           <div class="info">
-                            <span><%= date %></span>
+                            <span><%= created_at.toLocaleDateString() %></span>
                             <span><%= author %></span>
                           </div>
                         </article>
