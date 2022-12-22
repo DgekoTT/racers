@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const fs = require('fs');
 const path = require('path');
 const morgan = require('morgan');
-const exp = require('constants');
 const Driver = require('./models/driver.js');
-const { send } = require('process');
+const Recaptcha = require('express-recaptcha').RecaptchaV3;
+
+const recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', { callback: 'cb' })
 
 
 const PORT = 3000;
@@ -77,13 +78,17 @@ app.get('/posts/:id', (req, res) => {
 });
 
 app.post('/add-post', (req, res) => {
-    const { title, author, text, category} = req.body;
-    const post = new Driver({title, author, text, category});
-    post
-        .save()
-        .then((result) => res.send(result))
-        .catch((e) => {
-            console.log(e);
-            res.render(createPath('error'), )
-        })
+    recaptcha.verify(req, (error, data) => {
+        if (!error) {
+            const { title, author, text, category} = data.body;
+            const post = new Driver({title, author, text, category});
+            post
+                .save()
+                .then((result) => res.send(result))
+                .catch((e) => {
+                    console.log(e);
+                    res.render(createPath('error'), )
+                })
+            } 
+})
 });
