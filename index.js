@@ -4,9 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const morgan = require('morgan');
 const Driver = require('./models/driver.js');
-const Recaptcha = require('express-recaptcha').RecaptchaV3;
-
-const recaptcha = new Recaptcha('SITE_KEY', 'SECRET_KEY', { callback: 'cb' })
 
 
 const PORT = 3000;
@@ -35,7 +32,7 @@ app.use( express.static('views'))
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))//  обеспечение для регистрации HTTP-запросов и вывод в терминал
 
-app.use(express.urlencoded({extended: false}))// анализирует входящие запросы, небходим для обработки Post запроса мне
+app.use(express.urlencoded({extended: false}))// анализирует входящие запросы, небходим для обработки Post запроса 
 
 app.get('/', (req, res) => { // выдает главную страницу
     const title = 'Home';
@@ -47,10 +44,11 @@ app.get('/contacts', (req, res) => { // выдает главную контак
     res.render(createPath('contacts'), {title});
 });
 
-app.get('/posts', (req, res) => { // выдает главную постов
+app.get('/posts', (req, res) => { // выдает все посты
     const title = 'Formula';
     Driver
         .find()
+        .sort({created_at: -1})
         .then((posts) => res.render(createPath('posts'), {posts, title}))
         .catch((e) => {
             console.log(e);
@@ -65,30 +63,23 @@ app.get('/add-post', (req, res) => { // добавляет пост
 
 app.get('/posts/:id', (req, res) => {
     const title = 'Post';
-    const post = 
-        {
-            id: '1', 
-            text: 'we a here',
-            title: 'first',
-            date: '01.01.2022',
-            author: 'dgor',
-            catName: 'F1',
-        };
-    res.render(createPath('post'), {post, title});
+    Driver
+        .findById(req.params.id)
+        .then((post) => res.render(createPath('post'), {post, title}))
+        .catch((e) => {
+            console.log(e);
+            res.render(createPath('error'), )
+        })
 });
 
 app.post('/add-post', (req, res) => {
-    recaptcha.verify(req, (error, data) => {
-        if (!error) {
-            const { title, author, text, category} = data.body;
-            const post = new Driver({title, author, text, category});
-            post
-                .save()
-                .then((result) => res.send(result))
-                .catch((e) => {
-                    console.log(e);
-                    res.render(createPath('error'), )
+    const { title, author, text, category} = req.body;
+    const post = new Driver({title, author, text, category});
+    post
+        .save()
+        .then(() => res.redirect('/posts'))
+        .catch((e) => {
+            console.log(e);
+            res.render(createPath('error'), )
                 })
-            } 
-})
-});
+           });

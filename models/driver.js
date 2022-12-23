@@ -16,7 +16,7 @@ const postShema = new Shema({
     },
     category: {
         type: String,
-        
+        required: true,
     },
     photo: {
         type: String
