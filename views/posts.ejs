@@ -81,6 +81,9 @@
                             <span><%= created_at.toLocaleDateString() %></span>
                             <span><%= author %></span>
                           </div>
+                          <button class="btn-delete" data-id="<%= id %>">
+                            <i class="fas fa-tresh-all" data-id="<%= id %>">DELETE</i>
+                          </button>
                         </article>
                     </li>
                 </div>
@@ -89,6 +92,16 @@
         </ul>
     </div>
     <script>
+        document.addEventListener('click', (e) =>{
+          const id = e.target?.dataset?.id || null;
+          if (id) {
+            fetch(`/posts/${id}`,{
+              method: 'DELETE',
+            }).then(()=> {
+              window.location.reload();
+            });
+          }
+        });
         filterSelection("all")
         function filterSelection(c) {
           var x, i;

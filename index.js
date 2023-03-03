@@ -82,4 +82,15 @@ app.post('/add-post', (req, res) => {
             console.log(e);
             res.render(createPath('error'), )
                 })
-           });
+});
+
+app.delete('/posts/:id', (req, res) => {
+    Driver
+        .findByIdAndDelete(req.params.id)
+        .then(result  => res.sendStatus(200))
+        .catch((e) => {
+            console.log(e);
+            res.render(createPath('error'), )
+        })
+});
+           
